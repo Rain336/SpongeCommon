@@ -75,37 +75,7 @@ public abstract class MixinNetHandlerLoginServer implements RemoteConnection, IM
     @Redirect(method = "tryAcceptPlayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/management/ServerConfigurationManager;"
             + "allowUserToConnect(Ljava/net/SocketAddress;Lcom/mojang/authlib/GameProfile;)Ljava/lang/String;"))
     public String onAllowUserToConnect(ServerConfigurationManager confMgr, SocketAddress address, com.mojang.authlib.GameProfile profile) {
-        String kickReason = confMgr.allowUserToConnect(address, profile);
-        Text disconnectMessage = Texts.of("You are not allowed to log in to this server.");
-        if (kickReason != null) {
-            disconnectMessage = Texts.of(kickReason);
-        }
-
-        MessageSink sink = MessageSinks.toAll();
-        this.clientConEvent = SpongeEventFactory.createClientConnectionEventLogin(Sponge.getGame(), Cause.of(this.loginGameProfile), disconnectMessage, disconnectMessage, sink, sink, this, (GameProfile) this.loginGameProfile);
-        if (kickReason != null) {
-            this.clientConEvent.setCancelled(true);
-        }
-
-        Sponge.getGame().getEventManager().post(this.clientConEvent);
         return null; // We handle disconnecting
-    }
-
-    /**
-     * The &#64;At target positions this inject to directly below the above
-     * redirect. It can't be handled in the same method because the callback
-     * info is not available in a redirect.
-     *
-     * @param ci Callback info
-     */
-    @Inject(method = "tryAcceptPlayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/NetHandlerLoginServer;"
-            + "closeConnection(Ljava/lang/String;)V", shift = At.Shift.BY, by = -6), cancellable = true)
-    public void onTryAcceptPlayer(CallbackInfo ci) {
-        if (this.clientConEvent.isCancelled()) {
-            disconnectClient(Optional.ofNullable(this.clientConEvent.getMessage()));
-            ci.cancel();
-        }
-        this.clientConEvent = null;
     }
 
     private void closeConnection(IChatComponent reason) {

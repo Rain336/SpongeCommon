@@ -83,6 +83,10 @@ public class SpongeHooks {
     }
 
     public static void logEntityDeath(Entity entity) {
+        if (entity == null || entity.worldObj.isRemote) {
+            return;
+        }
+
         SpongeConfig<?> config = getActiveConfig(entity.worldObj);
         if (config.getConfig().getLogging().entityDeathLogging()) {
             logInfo("[" + config.getConfigName() + "] [" + config.getConfigName() + "] Dim: {0} setDead(): {1}",
@@ -92,6 +96,10 @@ public class SpongeHooks {
     }
 
     public static void logEntityDespawn(Entity entity, String reason) {
+        if (entity == null || entity.worldObj.isRemote) {
+            return;
+        }
+
         SpongeConfig<?> config = getActiveConfig(entity.worldObj);
         if (config.getConfig().getLogging().entityDespawnLogging()) {
             logInfo("[" + config.getConfigName() + "] Dim: {0} Despawning ({1}): {2}", entity.worldObj.provider.getDimensionId(), reason, entity);
@@ -100,6 +108,10 @@ public class SpongeHooks {
     }
 
     public static void logEntitySpawn(Entity entity) {
+        if (entity == null || entity.worldObj.isRemote) {
+            return;
+        }
+
         SpongeConfig<?> config = getActiveConfig(entity.worldObj);
         if (config.getConfig().getLogging().entitySpawnLogging()) {
             logInfo("[" + config.getConfigName() + "] Dim: {0} Spawning: {1}", entity.worldObj.provider.getDimensionId(), entity);
@@ -108,6 +120,10 @@ public class SpongeHooks {
     }
 
     public static void logChunkLoad(World world, Vector3i chunkPos) {
+        if (world.isRemote) {
+            return;
+        }
+
         SpongeConfig<?> config = getActiveConfig(world);
         if (config.getConfig().getLogging().chunkLoadLogging()) {
             logInfo("[" + config.getConfigName() + "] Load Chunk At [{0}] ({1}, {2})", world.provider.getDimensionId(), chunkPos.getX(),
@@ -117,6 +133,10 @@ public class SpongeHooks {
     }
 
     public static void logChunkUnload(World world, Vector3i chunkPos) {
+        if (world.isRemote) {
+            return;
+        }
+
         SpongeConfig<?> config = getActiveConfig(world);
         if (config.getConfig().getLogging().chunkUnloadLogging()) {
             logInfo("[" + config.getConfigName() + "] Unload Chunk At [{0}] ({1}, {2})", world.provider.getDimensionId(), chunkPos.getX(),
@@ -133,6 +153,10 @@ public class SpongeHooks {
     }
 
     public static boolean checkBoundingBoxSize(Entity entity, AxisAlignedBB aabb) {
+        if (entity == null || entity.worldObj.isRemote) {
+            return false;
+        }
+
         SpongeConfig<?> config = getActiveConfig(entity.worldObj);
         if (!(entity instanceof EntityLivingBase) || entity instanceof EntityPlayer) {
             return false; // only check living entities that are not players
@@ -168,6 +192,10 @@ public class SpongeHooks {
     }
 
     public static boolean checkEntitySpeed(Entity entity, double x, double y, double z) {
+        if (entity == null || entity.worldObj.isRemote) {
+            return false;
+        }
+
         SpongeConfig<?> config = getActiveConfig(entity.worldObj);
         int maxSpeed = config.getConfig().getEntity().getMaxSpeed();
         if (maxSpeed > 0) {
@@ -210,6 +238,10 @@ public class SpongeHooks {
     // TODO - needs to be hooked
     @SuppressWarnings("rawtypes")
     public static void logEntitySize(Entity entity, List list) {
+        if (entity == null || entity.worldObj.isRemote) {
+            return;
+        }
+
         SpongeConfig<?> config = getActiveConfig(entity.worldObj);
         if (!config.getConfig().getLogging().logEntityCollisionChecks()) {
             return;
