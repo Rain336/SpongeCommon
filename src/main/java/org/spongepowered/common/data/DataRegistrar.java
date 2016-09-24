@@ -394,6 +394,9 @@ public class DataRegistrar {
         dataManager.registerDualProcessor(PickupRuleData.class, SpongePickupRuleData.class, ImmutablePickupRuleData.class,
                 ImmutableSpongePickupRuleData.class, new PickupRuleDataProcessor());
 
+        dataManager.registerDualProcessor(ShatteringData.class, SpongeShatteringData.class, ImmutableShatteringData.class,
+                ImmutableSpongeShatteringData.class, new ShatteringDataProcessor());
+
         // Item Processors
 
         dataManager.registerDualProcessor(FireworkEffectData.class, SpongeFireworkEffectData.class,

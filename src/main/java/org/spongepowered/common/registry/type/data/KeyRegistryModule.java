@@ -958,6 +958,8 @@ public class KeyRegistryModule implements AdditionalCatalogRegistryModule<Key<?>
 
         this.fieldMap.put("invulnerability_ticks", makeSingleKey(INTEGER_TOKEN, BOUNDED_INTEGER_VALUE_TOKEN, of("HurtTime"), "sponge:invulnerability_ticks", "Invulnerability Ticks"));
 
+        this.fieldMap.put("will_shatter", makeSingleKey(BOOLEAN_TOKEN, BOOLEAN_VALUE_TOKEN, of("WillShatter"), "sponge:will_shatter", "Will Shatter"));
+
         for (Key<?> key : this.fieldMap.values()) {
             this.keyMap.put(key.getId().toLowerCase(Locale.ENGLISH), key);
         }
